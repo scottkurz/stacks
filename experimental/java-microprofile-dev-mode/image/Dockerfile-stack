@@ -15,7 +15,7 @@ RUN mvn install dependency:go-offline -DskipTests -f pom-dev.xml
 
 WORKDIR /project/user-app
 
-ENV APPSODY_MOUNTS="~/.m2/repository:/root/.m2/repository;src:/project/user-app/src;pom.xml:/project/user-app/pom.xml"
+ENV APPSODY_MOUNTS="~/.m2/repository:/root/.m2/repository;src:/project/user-app/src;pom.xml:/project/user-app/pom.xml;migrationassets:/project/user-app/migrationassets"
 ENV APPSODY_DEPS=/project/user-app/target
 
 ENV APPSODY_WATCH_DIR=/project/user-app

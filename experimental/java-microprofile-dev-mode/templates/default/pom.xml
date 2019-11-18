@@ -8,15 +8,39 @@
     <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>java-microprofile-dev-mode</artifactId>
-        <version>0.2.10</version>
+        <version>0.2.11</version>
     </parent>
 
+<!--
     <groupId>dev.appsody.starter.java-microprofile</groupId>
     <artifactId>starter-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
+	-->
+    <groupId>dev.appsody.starter.java-microprofile</groupId>
+    <artifactId>modresorts</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+	
+<!--
+    <repositories>
+        <repository>
+            <id>TALocalRepo</id>
+            <name>TALocalRepo</name>
+            <url>file://project/user-app/migrationassets</url>
+        </repository>
+    </repositories>
+-->
     <dependencies>
+		<!-- TA migration war specified as a dependency -->
+		<!--
+        <dependency>
+            <groupId>ta.migratedapp</groupId>
+            <artifactId>modresorts</artifactId>
+            <version>1.0</version>
+            <type>war</type>
+        </dependency>
+		-->
         <!-- Open Liberty Features -->
         <dependency>
             <groupId>io.openliberty.features</groupId>
@@ -53,45 +77,144 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
-	    <scope>test</scope>
+        <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
             <version>2.3.0.1</version>
-	    <scope>test</scope>
+        <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
             <version>2.3.2</version>
-	    <scope>test</scope>
+        <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
-	    <scope>test</scope>
+        <scope>test</scope>
         </dependency>
     </dependencies>
 
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${version.maven-war-plugin}</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <packagingExcludes>pom.xml</packagingExcludes>
-                </configuration>
+    <profiles>
+        <profile>
+            <id>bin</id>
+            <activation>
+				<activeByDefault>true</activeByDefault>
+                <file>
+                    <exists>./migrationassets</exists>
+                </file>
+            </activation>
+			<build>
+<!--
+			<dependencies>
+				<dependency>
+					<groupId>ta.migratedapp</groupId>
+					<artifactId>modresorts</artifactId>
+					<version>1.0</version>
+					<type>war</type>
+				</dependency>
+			</dependencies>
+			-->
+            <plugins>
+			
+				<plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resource-one</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>./migrationassets</directory>
+                                    <includes>
+                                        <include>*.war</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
-            <!-- Enable liberty-maven plugin -->
+			<plugin>
+				  <artifactId>maven-war-plugin</artifactId>
+				  <version>${version.maven-war-plugin}</version>
+				  <executions>
+					<execution>
+					  <id>default-war</id>
+					  <phase>compile</phase>
+					  <goals>
+						<goal>war</goal>
+					  </goals>
+					  <configuration>
+						<skip>true</skip>
+						<packagingExcludes>pom.xml</packagingExcludes>
+						<stripVersion>true</stripVersion>
+					  </configuration>
+					</execution>
+					<execution>
+					  <id>pkg-war</id>
+					  <phase>package</phase>
+					  <goals>
+						<goal>war</goal>
+					  </goals>
+					  <configuration>
+						<skip>true</skip>
+						<packagingExcludes>pom.xml</packagingExcludes>
+						<stripVersion>true</stripVersion>
+					  </configuration>
+					</execution>
+				  </executions>
+				  <configuration>
+					<packagingExcludes>pom.xml</packagingExcludes>
+					<stripVersion>true</stripVersion>
+				  </configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<skipMain>true</skipMain>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>3.0.0-M1</version>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+				
+			<!--	
             <plugin>
-                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>3.0.M1</version>
+                <version>3.1</version>
+				<executions>
+				<execution>
+                        <id>deployAJM1</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <appsDirectory>apps</appsDirectory>
+                            <stripVersion>true</stripVersion>
+							<deployPackages>all</deployPackages>
+							<looseApplication>false</looseApplication>
+                        </configuration>
+                </execution>
+				</executions>
                 <configuration>
                     <verifyTimeout>120</verifyTimeout>
                     <assemblyArtifact>
@@ -104,9 +227,55 @@
                     <stripVersion>true</stripVersion>
                     <configFile>src/main/liberty/config/server.xml</configFile>
                     <appsDirectory>apps</appsDirectory>
+                    <packageFile>${package.file}</packageFile>
+                    <include>${packaging.type}</include>
+                    <bootstrapProperties>
+                        <default.http.port>${http.port}</default.http.port>
+                        <default.https.port>${https.port}</default.https.port>
+                        <app.context.root>${app.name}</app.context.root>
+                    </bootstrapProperties>
+                </configuration>
+            </plugin>
+			-->
+            </plugins>
+			</build>
+        </profile>
+    </profiles>
+    
+    <build>
+        <finalName>modresorts-1.0</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.maven-war-plugin}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>pom.xml</packagingExcludes>
+                </configuration>
+            </plugin>
+            <!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <verifyTimeout>120</verifyTimeout>
+                    <assemblyArtifact>
+                        <groupId>${liberty.groupId}</groupId>
+                        <artifactId>${liberty.artifactId}</artifactId>
+                        <version>${version.openliberty-runtime}</version>
+                        <type>zip</type>
+                    </assemblyArtifact>
+                    <serverName>defaultServer</serverName>
+                    <stripVersion>true</stripVersion>
+                    <configFile>src/main/liberty/config/server.xml</configFile>
+                    <appsDirectory>apps</appsDirectory>
+					<!--
                     <looseApplication>true</looseApplication>
                     <packageFile>${package.file}</packageFile>
                     <include>${packaging.type}</include>
+					-->
                     <bootstrapProperties>
                         <default.http.port>${http.port}</default.http.port>
                         <default.https.port>${https.port}</default.https.port>
