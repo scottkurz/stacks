@@ -8,7 +8,7 @@ COPY pom.xml /project/
 COPY user-app/pom.xml /project/user-app/
 RUN mvn -B -f /project/pom.xml install dependency:copy-dependencies && \
     mvn -B -f /project/pom.xml dependency:resolve-plugins -DexcludeTransitive=true && \
-    mvn -B -f /project/user-app/pom.xml install dependency:copy-dependencies && \
+    mvn -B -f /project/user-app/pom.xml install -DskipTests=true -DskipDeploy=true dependency:copy-dependencies && \
     mvn -B -f /project/user-app/pom.xml dependency:resolve-plugins -DexcludeTransitive=true
 
 COPY . /project
