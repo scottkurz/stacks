@@ -13,7 +13,7 @@ COPY ./util /project/util
 RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies, also trigger Open Liberty install
-COPY ./user-app/pom.xml /project/user-app/pom.xml
+COPY ./user-app /project/user-app
 COPY ./validate.sh /project/user-app/validate.sh
 RUN cd /project/user-app && ./validate.sh
 
