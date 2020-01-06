@@ -8,9 +8,7 @@
     <parent><!--required parent POM-->
         <groupId>dev.appsody</groupId>
         <artifactId>java-openliberty</artifactId>
-        <version>
-[0.1, 0.2)
-</version>
+        <version>[0.1, 0.2)</version>
     </parent>
 
     <groupId>dev.appsody.starter.java-openliberty</groupId>
@@ -22,22 +20,12 @@
         
 <!-- Aggregate of MicroProfile APIs -->
         <dependency>
-            <groupId>
-org.eclipse.microprofile
-</groupId>
-            <artifactId>
-microprofile
-</artifactId>
-            
-<version>3.2</version>
-            
-<type>
-pom
-</type>
-        
-<scope>provided</scope>
-        
-</dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>3.2</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
         <!-- For tests -->
         <dependency>
             <groupId>junit</groupId>
@@ -144,24 +132,6 @@ pom
                         <resources>
                             <resource>
                                 <directory>migrationassets</directory>
-                                <includes>
-                                    <include>*.war</include>
-                                </includes>
-                            </resource>
-                        </resources>
-                    </configuration>
-                </execution>
-                <execution>
-                    <id>copy-war-to-liberty</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>copy-resources</goal>
-                    </goals>
-                    <configuration>
-                        <outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/apps</outputDirectory>
-                        <resources>
-                            <resource>
-                                <directory>target</directory>
                                 <includes>
                                     <include>*.war</include>
                                 </includes>

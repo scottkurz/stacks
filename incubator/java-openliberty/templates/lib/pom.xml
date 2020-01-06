@@ -116,30 +116,6 @@
           </execution>
         </executions>
       </plugin>
-        <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-                <execution>
-                    <id>copy-war-to-liberty</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>copy-resources</goal>
-                    </goals>
-                    <configuration>
-                        <outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/apps</outputDirectory>
-                        <resources>
-                            <resource>
-                                <directory>target</directory>
-                                <includes>
-                                    <include>*.war</include>
-                                </includes>
-                            </resource>
-                        </resources>
-                    </configuration>
-                </execution>
-           </executions>
-        </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -160,9 +136,7 @@
                         <version>${version.openliberty-runtime}</version>
                         <type>zip</type>
                     </assemblyArtifact>
-                    <stripVersion>
-true
-</stripVersion>
+                    <stripVersion>true</stripVersion>
 					<serverStartTimeout>120</serverStartTimeout>
                     <bootstrapProperties>
                         <default.http.port>${http.port}</default.http.port>
@@ -202,9 +176,7 @@ true
                 <executions>
                     <execution>
                         <phase>integration-test</phase>
-                        <id>
-it-exec
-</id>
+                        <id>it-exec</id>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
