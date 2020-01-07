@@ -4,7 +4,7 @@
 
 - [ ] Followed the [commit message guidelines](https://github.com/appsody/website/blob/master/CONTRIBUTING.md#commit-message-guidelines).
 
-- [ ] Stack adheres to [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md).
+- [ ] Stack adheres to [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/lifecycle.md).
 
 
 ### Modifying an existing stack:
