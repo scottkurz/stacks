@@ -23,4 +23,3 @@ requirements:
 templating-data:
     libertyversion: '20.0.0.1'
     parentpomrange: '[0.1, 0.2)'
-
