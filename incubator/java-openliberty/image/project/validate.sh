@@ -1,15 +1,25 @@
 #!/bin/bash
 
+#can we even run the appsody command?
+if [ -e /project/user-app/.appsody-binary ]
+then 
+	if [ $APPSODY_DEV_MODE == 'prep' ]
+	then
+		echo appsody run/debug/test not supported when using binary template.
+		exit 1
+	fi
+fi
+
 # Test pom.xml is present and a file.
 if [ ! -f ./pom.xml ]; then
-  echo "Error: Could not find Maven pom.xml
+	echo "Error: Could not find Maven pom.xml
 
-  * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
-  * On Windows and MacOS, the project directory should also be shared with Docker: 
-    - Win: https://docs.docker.com/docker-for-windows/#shared-drives
-    - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
-  "
-  exit 1   
+		* The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
+		* On Windows and MacOS, the project directory should also be shared with Docker: 
+		- Win: https://docs.docker.com/docker-for-windows/#shared-drives
+		- Mac: https://docs.docker.com/docker-for-mac/#file-sharing
+		"
+	exit 1
 fi
 
 # 
