@@ -17,8 +17,12 @@ fi
 # commands that we use otherwise, so as to avoid extra downloads.  It's only during local dev
 # mode that we want to use /mvn/repository, mounted to the host ~/.m2/repository.
 #
+MODE=
+if [ $# -ge 1 ]; then
+  MODE=$1
+fi
 M2_LOCAL_REPO=
-if [ ! -z "$APPSODY_DEV_MODE" ]; then
+if [ $MODE == dev ]; then
     M2_LOCAL_REPO="-Dmaven.repo.local=/mvn/repository"
 fi
 

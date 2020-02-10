@@ -1,19 +1,25 @@
 #!/bin/bash
 
-NOOP_APPSODY_DEV=0
+ACTION=
+if [ $# -ge 1 ]; then
+  ACTION=$1
+fi
 
+NOOP_APPSODY_DEV=
 if [ -e /project/user-app/.appsody-nodev ]
 then
 	NOOP_APPSODY_DEV=1
 fi
 
-case $APPSODY_DEV_MODE in
+case $ACTION in
+	prep)
+		../validate.sh dev
+		;;
 	run)
-		#if [ -e /project/user-app/.appsody-nodev ]
 		if [ $NOOP_APPSODY_DEV = 1 ]
 		then
 			echo appsody run/debug/test not supported when .appsody-nodev detected.
-			exit 1
+			exit 0
 		else
 			mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev
 		fi
@@ -22,7 +28,7 @@ case $APPSODY_DEV_MODE in
 		if [ $NOOP_APPSODY_DEV = 1 ]
 		then
 			echo appsody run/debug/test not supported when .appsody-nodev detected.
-			exit 1
+			exit 0
 		else
 			mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev
 		fi
