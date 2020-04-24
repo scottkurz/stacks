@@ -15,7 +15,7 @@ COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
 RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
 # Copy and run a simple version check
-COPY --chown=java_user:java_grou ./util /project/util
+COPY --chown=java_user:java_group ./util /project/util
 RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies
