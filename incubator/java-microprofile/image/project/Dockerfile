@@ -35,7 +35,6 @@ RUN cd /project/user-app && \
 
 RUN cd /project/user-app/target && \
     unzip *.zip && \
-    mkdir /config && \
     mv wlp/usr/servers/*/* /config/
 
 # Step 2: Package Open Liberty image
